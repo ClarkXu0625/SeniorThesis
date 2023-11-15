@@ -26,11 +26,8 @@ if __name__ == "__main__":
 
     '''h5 file'''
     path = get_path("final_dataset.h5")
-    with h5py.File(path, 'r') as file:
-        #data = file['name']
-        
-        # get the values ranging from index 0 to 15
-        print(file)
+    f1 = h5py.File(path,'r+')
+    print(f1.keys())  
 
 
 
