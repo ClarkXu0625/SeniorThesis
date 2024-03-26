@@ -1,4 +1,6 @@
+addpath('utils')
 import gating_variable_update.*
+
 
 m = zeros(1,150);
 V_t = -56.6e-3 * ones(1,150);
