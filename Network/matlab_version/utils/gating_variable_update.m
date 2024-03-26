@@ -20,10 +20,13 @@ function updated = gating_variable_update(V, variable, type, Vt, tau_max)
             alpha = .128 * exp(-(V-Vt-17)/18);
             beta = 4 ./ (exp(-(V-Vt-40)/5) + 1);
 
-        elseif type == 's'
-            alpha = 
-
         elseif type == 'q'
+            alpha = .0055 * (-27-V) ./ (exp((-27-V)/3.8)-1);
+            beta = .94 * exp((-75-V)/17);
+
+        elseif type == 's'
+            alpha = .000457 * exp((-13-V)/50);
+            beta = .0065 ./ (exp((-15-V)/28) + 1);
 
         end
         
