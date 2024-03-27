@@ -1,10 +1,10 @@
 function updated = gating_variable_update(V, variable, type, Vt, tau_max)
 % input V is membrane potential; variable is the gating variable to update;
 % type is string n, m, h, p, q, or s; 
-    V = V .* 1e3;
+    V = V .* 1e3;   % convert to mV unit
     Vt = Vt .* 1e3;
     if type == 'p'
-        p_inf = 1/(exp((-V-35)/10)+1);
+        p_inf = 1 ./(exp((-V-35)/10)+1);
         tau_p = tau_max ./ (3.3*exp((V+35)/20) + exp((-V-35)/20));
         updated = (p_inf - variable) ./ tau_p;
     else
