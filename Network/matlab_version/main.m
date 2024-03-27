@@ -26,6 +26,7 @@ N = N_FS + N_RSA + N_IB;
 % convert param array to length N
 C_m = param_to_array(C_m);
 V_k = param_to_array(V_k);
+V_ca = param_to_array(V_ca);
 V_na = param_to_array(V_na);
 V_l = param_to_array(V_l);
 V_t = param_to_array(V_t);
@@ -50,11 +51,13 @@ dt = 1e-4;          % 0.1ms time step
 t = 0: dt: tmax;    % time vector
 Nt = length(t);
 V = zeros(Nt, N);
+V(1,:) = V_l;
 
 % define connectivity matrix
 E_el = rand(N)*.06e-3;    % connectivity of electrical synapses, 0-0.06mS
 E_ch = rand(N)*.1e-3;     % connectivity of chemical synapses, 0-0.1mS
 I_max = 1e-7;           % 0.1 uA maximum amplitude as input current
+
 
 for i = 2:Nt
     I_inj = zeros(1, N);
@@ -75,12 +78,14 @@ for i = 2:Nt
     s = s + dt*dsdt;
 
     
-    V(i, :) = 1./ C_m .* (I_inj - ...
+    dvdt = 1./ C_m .* (I_inj - ...
         g_k .* (n.^4).*(V(i-1,:)-V_k) -...
         g_m .* p.*(V(i-1,:)-V_k) -...
         g_ca .* (q.^2).*s.*(V(i-1,:)-V_ca) -...
         g_na .* (m.^3).*h.*(V(i-1,:)-V_na) -...
         g_l .* (V(i-1,:)-V_l));
+    
+    V(i,:) = V(i-1,:) + dt*dvdt;
 
 end
 
