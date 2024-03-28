@@ -29,7 +29,7 @@ N_RSA = 90;
 N_IB = 30;
 N = N_FS + N_RSA + N_IB;
 
-% convert param array to length N
+% convert param array to row vector with length N
 C_m = param_to_array(C_m);
 V_k = param_to_array(V_k);
 V_ca = param_to_array(V_ca);
@@ -48,7 +48,7 @@ V_syn = param_to_array(V_syn);
 V_0 = param_to_array(V_0);
 
 % initiate gating variables
-n = zeros(1, N);
+n = zeros(N, 1);
 m = zeros(size(n));
 h = zeros(size(n));
 p = zeros(size(n));
@@ -60,12 +60,12 @@ tmax = 10;          % total simulation time
 dt = 1e-4;          % 0.1ms time step
 t = 0: dt: tmax;    % time vector
 Nt = length(t);
-V = zeros(Nt, N);
-V(1,:) = V_l;
+V = zeros(N, Nt);
+V(:,1) = V_l;
 
 % define connectivity matrix
 E_el = rand(N)*.06e-3;    % connectivity of electrical synapses, 0-0.06mS
-E_ch = rand(N)*.1e-3;     % connectivity of chemical synapses, 0-0.1mS
+E_ch = rand(N)*.1e-3;     % connectivity of chemical synapses, 0-0.1mS, also defines the adacency matrix
 I_max = 0.1e-2;           % 0.1 uA/cm^2 maximum amplitude as input current
 
 % set random piecewise input current amplitude..
@@ -77,6 +77,7 @@ amplitude = rand * I_max;
 
 
 for i = 2:Nt
+    Vi = V(:,i-1);
 
     % function for piecewise random amplitude
     % update amplitude to another random value in range of 0 to maximum
@@ -85,16 +86,16 @@ for i = 2:Nt
         amplitude = rand * I_max;
         j = j+1;
     end
-    I_inj = amplitude * ones(1, N);
+    I_inj = amplitude * ones(N,1);
     
     % update gating variable before each run
-    dmdt = gating_variable_update(V(i-1,:), m, 'm', V_t, tau_max);
-    dndt = gating_variable_update(V(i-1,:), n, 'n', V_t, tau_max);
-    dhdt = gating_variable_update(V(i-1,:), h, 'h', V_t, tau_max);
-    dpdt = gating_variable_update(V(i-1,:), p, 'p', V_t, tau_max);
-    dqdt = gating_variable_update(V(i-1,:), q, 'q', V_t, tau_max);
-    dsdt = gating_variable_update(V(i-1,:), s, 's', V_t, tau_max);
-    drdt = gating_variable_update(V(i-1,:), r, 'r', V_t, tau_max);
+    dmdt = gating_variable_update(Vi, m, 'm', V_t, tau_max);
+    dndt = gating_variable_update(Vi, n, 'n', V_t, tau_max);
+    dhdt = gating_variable_update(Vi, h, 'h', V_t, tau_max);
+    dpdt = gating_variable_update(Vi, p, 'p', V_t, tau_max);
+    dqdt = gating_variable_update(Vi, q, 'q', V_t, tau_max);
+    dsdt = gating_variable_update(Vi, s, 's', V_t, tau_max);
+    drdt = gating_variable_update(Vi, r, 'r', V_t, tau_max);
 
 
     m = m + dt*dmdt;
@@ -106,6 +107,7 @@ for i = 2:Nt
 
     % synapsic factor
     % electric synapse
+    S = ones(N,1);      % S is the selection column vector determine which neuron receives it
     A_el = E_el;
     D_sum_el = sum(E_el, 2);
     D_el = zeros(N);
@@ -113,19 +115,22 @@ for i = 2:Nt
         D_el(k, k) = D_sum_el(k);
         A_el(k, k) = 0;
     end
-    U_el = (D_el - A_el) * V(i-1, :).';
+    U_el = -(D_el - A_el) * Vi;
 
     % chemical synapse
-    U_ch = E_ch * (I_inj .* kron(ones(1, N), r) .* (V_syn - V(i-1,:)));
-    % update V
-    dvdt = 1./ C_m .* (I_inj - ...
-        g_k .* (n.^4).*(V(i-1,:)-V_k) -...
-        g_m .* p.*(V(i-1,:)-V_k) -...
-        g_ca .* (q.^2).*s.*(V(i-1,:)-V_ca) -...
-        g_na .* (m.^3).*h.*(V(i-1,:)-V_na) -...
-        g_l .* (V(i-1,:)-V_l));
     
-    V(i,:) = V(i-1,:) + dt*dvdt;
+    % U_ch = E_ch * (I_inj .* kron(ones(1, N), r) .* (V_syn - Vi).');
+
+
+    % update V
+    dvdt = 1./ C_m .* (I_inj .* S - ...
+        g_k .* (n.^4).*(Vi-V_k) -...
+        g_m .* p.*(Vi-V_k) -...
+        g_ca .* (q.^2).*s.*(Vi-V_ca) -...
+        g_na .* (m.^3).*h.*(Vi-V_na) -...
+        g_l .* (Vi-V_l));
+    
+    V(:, i) = Vi+dt*dvdt;
 
 end
 
