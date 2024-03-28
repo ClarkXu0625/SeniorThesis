@@ -21,7 +21,7 @@ function updated = gating_variable_update(V, variable, type, Vt, tau_max)
             beta = 0.5 * exp(-(V-Vt-10) ./ 40);
 
         elseif type == 'm'
-            alpha = (V-Vt-13) .* (-0.032 ./ (exp((-V+Vt+15)/5 -1)));
+            alpha = (V-Vt-13) .* (-0.32 ./ (exp((-V+Vt+15)/5 -1)));
             beta = .28 * (exp((V-Vt-40) ./ 5)) -1;
 
         elseif type == 'h'
