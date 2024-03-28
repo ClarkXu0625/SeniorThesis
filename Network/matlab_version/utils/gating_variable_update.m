@@ -3,6 +3,7 @@ function updated = gating_variable_update(V, variable, type, Vt, tau_max)
 % type is string n, m, h, p, q, or s; 
     V = V .* 1e3;   % convert to mV unit
     Vt = Vt .* 1e3;
+    
     if type == 'p'
         p_inf = 1 ./(exp((-V-35)/10)+1);
         tau_p = tau_max ./ (3.3*exp((V+35)/20) + exp((-V-35)/20));
@@ -14,6 +15,7 @@ function updated = gating_variable_update(V, variable, type, Vt, tau_max)
         V_0 = -20e-3;   % mV
         updated = (1/tau_r - 1/tau_d) * (1 - variable)./(1+exp(-V+V_0)) - variable/tau_d;
     else
+
         if type == 'n'
             alpha = (V-Vt-15) .* (-0.032 ./ (exp(-(V-Vt-15)/5) -1));
             beta = 0.5 * exp(-(V-Vt-10) ./ 40);
