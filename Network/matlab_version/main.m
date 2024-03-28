@@ -10,11 +10,11 @@ V_ca = [0, 0, 120] .* 1e-3;         % mV
 V_na = [50, 56, 50] .* 1e-3;        % mV
 V_l = [-70, -70.3, -70] .* 1e-3;        % mV
 V_t = [-52.6, -52.6, -52.6] .* 1e-3;    % mV
-g_k = [10, 6, 5] .* 1e1;           % mS/cm^2
-g_m = [0, .075, .03] .* 1e1;       % mS/cm^2
-g_ca = [0, 0, .2] .* 1e1;          % mS/cm^2
-g_na = [56, 56, 50] .* 1e1;        % mS/cm^2
-g_l = [1.5e-2, 2.05e-2, .01] .* 1e1;   % mS/cm^2
+g_k = [10, 6, 5] .* 10;           % mS/cm^2
+g_m = [0, .075, .03] .* 10;       % mS/cm^2
+g_ca = [0, 0, .2] .* 10;          % mS/cm^2
+g_na = [56, 56, 50] .* 10;        % mS/cm^2
+g_l = [1.5e-2, 2.05e-2, .01] .* 10;   % mS/cm^2
 tau_max = [1, 608, 608] .* 1e-3;    % ms
 
 % Sypase params
@@ -119,7 +119,6 @@ for i = 2:Nt
     U_el = -(D_el - A_el) * Vi;
 
     % chemical synapse
-    
     % U_ch = E_ch * (I_inj .* kron(ones(1, N), r) .* (V_syn - Vi).');
     U_ch = zeros(N, 1);
     for k = 1:N
@@ -141,5 +140,7 @@ for i = 2:Nt
     V(:, i) = Vi+dt*dvdt;
 
 end
+
+plot(t, V(1,:))
 
 
