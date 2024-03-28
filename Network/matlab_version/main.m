@@ -104,6 +104,7 @@ for i = 2:Nt
     p = p + dt*dpdt;
     q = q + dt*dqdt;
     s = s + dt*dsdt;
+    r = r + dt*drdt;
 
     % synapsic factor
     % electric synapse
@@ -120,15 +121,22 @@ for i = 2:Nt
     % chemical synapse
     
     % U_ch = E_ch * (I_inj .* kron(ones(1, N), r) .* (V_syn - Vi).');
-
-
+    U_ch = zeros(N, 1);
+    for k = 1:N
+        temp = 0;
+        for l = 1:N
+            temp = temp + E_ch(k,l) * r(l) * (V_syn(k) - Vi(l));
+        end
+        U_ch(k) = temp;
+    end
+    
     % update V
     dvdt = 1./ C_m .* (I_inj .* S - ...
         g_k .* (n.^4).*(Vi-V_k) -...
         g_m .* p.*(Vi-V_k) -...
         g_ca .* (q.^2).*s.*(Vi-V_ca) -...
         g_na .* (m.^3).*h.*(Vi-V_na) -...
-        g_l .* (Vi-V_l));
+        g_l .* (Vi-V_l) + U_ch + U_el);
     
     V(:, i) = Vi+dt*dvdt;
 
