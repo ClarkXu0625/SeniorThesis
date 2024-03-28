@@ -73,7 +73,7 @@ I_max = 0.1e-2;           % 0.1 uA/cm^2 maximum amplitude as input current
 piece_duration = 0.5;           % every piece is 0.5 second duration
 piece = 0:piece_duration:tmax;     
 j = 1;
-amplitude = rand * I_max;
+amplitude = rand(N,1) * I_max;
 
 
 for i = 2:Nt
@@ -83,10 +83,10 @@ for i = 2:Nt
     % update amplitude to another random value in range of 0 to maximum
     % amplitude for every time piece.
     if piece(j) <= t(i)
-        amplitude = rand * I_max;
+        amplitude = rand(N,1) * I_max;
         j = j+1;
     end
-    I_inj = amplitude * ones(N,1);
+    I_inj = amplitude;
     
     % update gating variable before each run
     dmdt = gating_variable_update(Vi, m, 'm', V_t, tau_max);
