@@ -70,7 +70,7 @@ I_max = 0.1e-2;           % 0.1 uA/cm^2 maximum amplitude as input current
 
 % set random piecewise input current amplitude..
 % maximum aplitude set to 0.1 uA
-piece_duration = 0.5;           % every piece is 0.5 second duration
+piece_duration = 0.1;           % every piece is 0.5 second duration
 piece = 0:piece_duration:tmax;     
 j = 1;
 amplitude = rand(N,1) * I_max;
