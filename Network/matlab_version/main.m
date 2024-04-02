@@ -61,7 +61,7 @@ dt = 1e-4;          % 0.1ms time step
 t = 0: dt: tmax;    % time vector
 Nt = length(t);
 V = zeros(N, Nt);
-V(:,1) = V_l;
+V(:,1) = -.04;
 
 % define connectivity matrix
 E_el = rand(N)*.06e-3;    % connectivity of electrical synapses, 0-0.06mS
@@ -129,6 +129,7 @@ for i = 2:Nt
         U_ch(k) = temp;
     end
     
+
     % update V
     dvdt = 1./ C_m .* (I_inj .* S - ...
         g_k .* (n.^4).*(Vi-V_k) -...
@@ -141,6 +142,6 @@ for i = 2:Nt
 
 end
 
-plot(t, V(1,:))
+figure(2); plot(t, V(1,:))
 
 
