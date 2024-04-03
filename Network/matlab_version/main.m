@@ -4,17 +4,19 @@ import gating_variable_update.*
 
 % def param
 % three space in array matches param for FS, RSA, and IB neuron
-C_m = [0.5, 1, 1] .* 1e-2;          % uF/cm^2
+% Per space unit isn't converted to standard unit, but only the unit on the
+% top, all the per square space unit is cm^2
+C_m = [0.5, 1, 1] .* 1e-6;          % uF/cm^2
 V_k = [-90, -90, -90] .* 1e-3;      % mV
 V_ca = [0, 0, 120] .* 1e-3;         % mV
 V_na = [50, 56, 50] .* 1e-3;        % mV
 V_l = [-70, -70.3, -70] .* 1e-3;        % mV
 V_t = [-52.6, -52.6, -52.6] .* 1e-3;    % mV
-g_k = [10, 6, 5] .* 10;           % mS/cm^2
-g_m = [0, .075, .03] .* 10;       % mS/cm^2
-g_ca = [0, 0, .2] .* 10;          % mS/cm^2
-g_na = [56, 56, 50] .* 10;        % mS/cm^2
-g_l = [1.5e-2, 2.05e-2, .01] .* 10;   % mS/cm^2
+g_k = [10, 6, 5] .* 1e-3;           % mS/cm^2
+g_m = [0, .075, .03] .* 1e-3;       % mS/cm^2
+g_ca = [0, 0, .2] .* 1e-3;          % mS/cm^2
+g_na = [56, 56, 50] .* 1e-3;        % mS/cm^2
+g_l = [1.5e-2, 2.05e-2, .01] .* 1e-3;   % mS/cm^2
 tau_max = [1, 608, 608] .* 1e-3;    % ms
 
 % Sypase params
@@ -24,7 +26,7 @@ V_syn = [-80, 20, 20] .* 1e-3;  % mV
 V_0 = [-20, -20, -20] .* 1e-3;  % mV
 
 % creating arrays
-N_FS = 30;
+N_FS = 30;      % Number of FS cells in the network
 N_RSA = 90;
 N_IB = 30;
 N = N_FS + N_RSA + N_IB;
@@ -61,12 +63,12 @@ dt = 1e-4;          % 0.1ms time step
 t = 0: dt: tmax;    % time vector
 Nt = length(t);
 V = zeros(N, Nt);
-V(:,1) = -.04;
+V(:,1) = -.04;      % starting voltage
 
 % define connectivity matrix
 E_el = rand(N)*.06e-3;    % connectivity of electrical synapses, 0-0.06mS
 E_ch = rand(N)*.1e-3;     % connectivity of chemical synapses, 0-0.1mS, also defines the adacency matrix
-I_max = 0.1e-2;           % 0.1 uA/cm^2 maximum amplitude as input current
+I_max = 0.1e-6;           % 0.1 uA/cm^2 maximum amplitude as input current
 
 % set random piecewise input current amplitude..
 % maximum aplitude set to 0.1 uA
@@ -83,7 +85,7 @@ for i = 2:Nt
     % update amplitude to another random value in range of 0 to maximum
     % amplitude for every time piece.
     if piece(j) <= t(i)
-        amplitude = rand(N,1) * I_max;
+        amplitude = rand(N,1) * I_max;  % reset injected current
         j = j+1;
     end
     I_inj = amplitude;
