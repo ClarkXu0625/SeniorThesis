@@ -1,4 +1,5 @@
 from load_spikes import load_spike
+from model_load import test
 
 import os
 from time import time
@@ -71,3 +72,18 @@ for signal in fin_data:
     wavelet_coeffs.append(coeffs)
 
 print(wavelet_coeffs[0])
+print(len(wavelet_coeffs))
+
+#####################################################
+## load model and test ###
+#####################################################
+
+# Split into Train, Test, and Validation sets
+X_train, X_test, y_train, y_test = \
+    train_test_split(X, y, test_size=0.5, random_state=1)
+
+X_train, X_val, y_train, y_val = \
+    train_test_split(X_train, y_train, test_size=0.25, random_state=1)
+
+
+test(X_test, y_test, '/Users/apple/Documents/GitHub/SeniorThesis/classifier_neuRecommend/model/xgboost_classifier.dump')
