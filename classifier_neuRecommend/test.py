@@ -24,9 +24,9 @@ final_dataset = load_spike()
 [neg_waveforms, pos_waveforms, neg_label, pos_label, fin_labels] = final_dataset
 
 
-#####################
-## preparing dataset
-#####################
+#####################################################
+## preparing dataset, PCA for dimension reduction ###
+#####################################################
 
 def zscore_custom(x):
     return zscore(x, axis=-1)
@@ -46,3 +46,4 @@ scaler_obj = StandardScaler().fit(pca_data)
 X = scaler_obj.transform(pca_data)
 y = fin_labels
 
+print(X[1])
