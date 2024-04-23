@@ -46,4 +46,28 @@ scaler_obj = StandardScaler().fit(pca_data)
 X = scaler_obj.transform(pca_data)
 y = fin_labels
 
-print(X[1])
+print(X.shape)
+
+# plt.scatter(X[:,0], X[:,1], color='red', s=100, marker='o')  # `s` is size, `marker` is the style of marker
+# plt.grid(True)  # Optional: adds a grid to the background
+
+#plt.show()
+
+
+#####################################################
+## Wavelet transformation for dimension reduction ###
+#####################################################
+import pywt
+
+def apply_wavelet_transform(signal, wavelet='db1'):
+    # You can adjust the 'level' based on your specific needs or leave it to determine automatically
+    coeffs = pywt.wavedec(signal, wavelet, level=None)  # Auto-select the level of decomposition
+    return coeffs
+
+wavelet_coeffs = []
+
+for signal in fin_data:
+    coeffs = apply_wavelet_transform(signal)
+    wavelet_coeffs.append(coeffs)
+
+print(wavelet_coeffs[0])
