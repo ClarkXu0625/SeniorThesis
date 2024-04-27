@@ -3,8 +3,8 @@ import tables
 import numpy as np
 
 
-def load_spike():
-    h5_path = 'final_dataset.h5'
+def load_spike(file_path='final_dataset.h5'):
+    h5_path = file_path
     # model_save_dir = path_vars['model_save_dir'] # Directory in which trained model will be saved
 
 
