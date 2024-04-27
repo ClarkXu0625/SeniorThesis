@@ -20,6 +20,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.model_selection import GridSearchCV
 
+
 # load file
 final_dataset = load_spike()
 [neg_waveforms, pos_waveforms, neg_label, pos_label, fin_labels] = final_dataset
@@ -65,14 +66,15 @@ def apply_wavelet_transform(signal, wavelet='db1'):
     coeffs = pywt.wavedec(signal, wavelet, level=None)  # Auto-select the level of decomposition
     return coeffs
 
-wavelet_coeffs = []
+def wavelet_transform(fin_data):
+    wavelet_coeffs = []
 
-for signal in fin_data:
-    coeffs = apply_wavelet_transform(signal)
-    wavelet_coeffs.append(coeffs)
+    for signal in fin_data:
+        coeffs = apply_wavelet_transform(signal)
+        wavelet_coeffs.append(coeffs)
 
-print(wavelet_coeffs[0])
-print(len(wavelet_coeffs))
+    print(wavelet_coeffs[0])
+    print(len(wavelet_coeffs))
 
 #####################################################
 ## load model and test ###
@@ -86,6 +88,6 @@ X_train, X_val, y_train, y_val = \
     train_test_split(X_train, y_train, test_size=0.25, random_state=1)
 
 
-test(X_test, y_test, '/Users/apple/Documents/GitHub/SeniorThesis/classifier_neuRecommend/model/xgboost_classifier.dump')
-
+# test(X_test, y_test, '/Users/apple/Documents/GitHub/SeniorThesis/classifier_neuRecommend/model/xgboost_classifier.dump')
+test(X_test, y_test, '../classifier_neuRecommend/model/xgboost_classifier.dump')
 
