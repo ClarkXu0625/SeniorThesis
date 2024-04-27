@@ -91,7 +91,7 @@ X_train, X_val, y_train, y_val = \
 
 # test(X_test, y_test, '/Users/apple/Documents/GitHub/SeniorThesis/classifier_neuRecommend/model/xgboost_classifier.dump')
 # test(X_test, y_test, '../classifier_neuRecommend/model/xgboost_classifier.dump')
-model_save_dir = '../classifier_neuRecommend/model_new'
+model_save_dir = 'classifier_neuRecommend/model_new'
 optim_params_path = os.path.join(model_save_dir, 'optim_params.json')
 
 with open(optim_params_path, 'r') as outfile:
