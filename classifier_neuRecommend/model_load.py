@@ -12,3 +12,5 @@ def test(X_test, y_test, path):
     # Assuming `y_test` are the true labels corresponding to `X_test`
     print("Accuracy:", accuracy_score(y_test, predictions))
     print(classification_report(y_test, predictions))
+
+
