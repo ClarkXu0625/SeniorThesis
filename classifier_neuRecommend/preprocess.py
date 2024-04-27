@@ -19,6 +19,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.model_selection import GridSearchCV
+import xgboost as xgb
 
 
 # load file
@@ -89,5 +90,15 @@ X_train, X_val, y_train, y_val = \
 
 
 # test(X_test, y_test, '/Users/apple/Documents/GitHub/SeniorThesis/classifier_neuRecommend/model/xgboost_classifier.dump')
-test(X_test, y_test, '../classifier_neuRecommend/model/xgboost_classifier.dump')
+# test(X_test, y_test, '../classifier_neuRecommend/model/xgboost_classifier.dump')
+model_save_dir = '../classifier_neuRecommend/model_new'
+optim_params_path = os.path.join(model_save_dir, 'optim_params.json')
 
+with open(optim_params_path, 'r') as outfile:
+    best_params = json.load(outfile)
+
+clf = xgb.XGBClassifier(**best_params)
+clf.fit(X_train, y_train)
+
+print(f'Score on training set : {clf.score(X_train, y_train)}')
+print(f'Score on test set : {clf.score(X_test, y_test)}')
