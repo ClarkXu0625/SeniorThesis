@@ -40,18 +40,5 @@ def load_spike(file_path='final_dataset.h5'):
     pos_label = [1]*pos_waveforms.shape[0]
     fin_labels = np.concatenate([neg_label, pos_label])
 
-    # plot all waveforms
-    # fig, ax = plt.subplots(1,2)
-    # ax[0].imshow(zscore(pos_waveforms,axis=-1), interpolation='nearest', aspect = 'auto')
-    # ax[0].set_title('True Spikes')
-    # ax[0].set_xlabel('Time (AU)')
-    # ax[0].set_ylabel('Waveform #')
-    # ax[1].imshow(zscore(neg_waveforms,axis=-1), interpolation='nearest', aspect = 'auto')
-    # ax[1].set_title('True Noise')
-    # ax[1].set_xlabel('Time (AU)')
-    # ax[1].set_ylabel('Waveform #')
-    # plt.tight_layout()
-    # plt.show()
-
     return [neg_waveforms, pos_waveforms, neg_label, pos_label, fin_labels]
 
