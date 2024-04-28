@@ -9,10 +9,7 @@ from scipy.stats import zscore
 from sklearn.decomposition import PCA as pca
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
-from sklearn.model_selection import GridSearchCV
-import xgboost as xgb
 
 
 def transform(neg_waveforms, pos_waveforms, fin_labels):
