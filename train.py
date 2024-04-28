@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from tqdm import tqdm
 
 [neg_waveforms, pos_waveforms, neg_label, pos_label, fin_labels] = load_spike()
@@ -16,10 +17,10 @@ from tqdm import tqdm
 
 # Split into Train, Test, and Validation sets
 X_train, X_test, y_train, y_test = \
-    train_test_split(X, y, test_size=0.5, random_state=1)
+    train_test_split(X, y, test_size=0.25, random_state=1)
 
-X_train, X_val, y_train, y_val = \
-    train_test_split(X_train, y_train, test_size=0.25, random_state=1)
+# X_train, X_val, y_train, y_val = \
+#     train_test_split(X_train, y_train, test_size=0.25, random_state=1)
 
 
 # #Initialize and train model
@@ -34,7 +35,7 @@ X_train, X_val, y_train, y_val = \
 
 
 # Initialize and train model
-model = XCS(learning_iterations = 500)  # 5000
+model = XCS(learning_iterations = 5000)  # 5000
 trainedModel = model.fit(X_train,y_train)
 
 print("Training completed.")
@@ -48,5 +49,17 @@ for i in tqdm(range(len(X_test)), desc="Prediction progress"):
     predictions.append(prediction)
 
 # Calculate accuracy
-accuracy = model.score(X_test, y_test)
+accuracy = accuracy_score(y_test, predictions)
 print("Accuracy:", accuracy)
+
+# Calculate precision
+precision = precision_score(y_test, predictions)
+print("Precision:", precision)
+
+# Calculate recall
+recall = recall_score(y_test, predictions)
+print("Recall:", recall)
+
+# Calculate F1 score
+f1 = f1_score(y_test, predictions)
+print("F1 Score:", f1)
