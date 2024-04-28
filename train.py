@@ -1,34 +1,32 @@
-import json
-import os
+import numpy as np
 import pandas as pd
-import h5py
+from classifier_neuRecommend.pca_transform import transform
+from classifier_neuRecommend.load_spikes import load_spike
+
+from skXCS import XCS
+from skXCS import StringEnumerator
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import train_test_split
+
+[neg_waveforms, pos_waveforms, neg_label, pos_label, fin_labels] = load_spike()
+[X, y] = transform(neg_waveforms, pos_waveforms, fin_labels)
+
+# Split into Train, Test, and Validation sets
+X_train, X_test, y_train, y_test = \
+    train_test_split(X, y, test_size=0.5, random_state=1)
+
+X_train, X_val, y_train, y_val = \
+    train_test_split(X_train, y_train, test_size=0.25, random_state=1)
 
 
-def get_path(filename):
-    filepath = os.path.join("data", filename)
-    return filepath
+#Initialize and train model
+model = XCS(learning_iterations = 500)  # 5000
+trainedModel = model.fit(X_train,y_train)
 
-if __name__ == "__main__": 
-    '''data summary stats'''
-    # Load the JSON file
-    with open(get_path("fin_data_summary_stats.json"), 'r') as file:
-        summary_status = json.load(file)
-
-    # Explore its content
-    # print(json.dumps(summary_status, indent=4))
-
-    ''' metadata'''
-    # Load the CSV file into a DataFrame
-    metadata_df = pd.read_csv(get_path('fin_data_metadata.csv'))
-
-    # Explore its content
-    #print(metadata_df.head())
-
-    '''h5 file'''
-    path = get_path("final_dataset.h5")
-    f1 = h5py.File(path,'r+')
-    print(f1.keys())  
+print(trainedModel)
 
 
-
-
+trainedModel.predict(X_test)
+trainedModel.score(X_test, y_test)
