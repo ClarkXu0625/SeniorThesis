@@ -1,9 +1,5 @@
 # import tables
 import numpy as np
-from tqdm import tqdm
-import pylab as plt 
-import pandas as pd
-from joblib import dump, load
 from scipy.stats import zscore
 
 from sklearn.decomposition import PCA as pca
