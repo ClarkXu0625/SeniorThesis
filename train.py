@@ -5,6 +5,7 @@ from classifier_neuRecommend.load_spikes import load_spike
 from skXCS import XCS
 from skXCS import StringEnumerator
 import numpy as np
+import pandas as pd
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -25,14 +26,16 @@ X_train, X_test, y_train, y_test = \
 
 
 # Initialize and train model, setting hyperparameters to maximize the perfomance of classification
-model = XCS(
-    N=2000,                 # Increased population size
-    beta=0.2,               # Adjust learning rate
-    theta_GA=25,            # Adjust GA threshold
-    e_0=0.01,         # Lower minimum error threshold
-    theta_sub=50,           # Experience threshold
-    learning_iterations=5000
-)
+# model = XCS(
+#     N=2000,                 # Increased population size
+#     beta=0.2,               # Adjust learning rate
+#     theta_GA=25,            # Adjust GA threshold
+#     e_0=0.01,         # Lower minimum error threshold
+#     theta_sub=50,           # Experience threshold
+#     learning_iterations=5000
+# )
+model = XCS(learning_iterations=5000)
+
 trainedModel = model.fit(X_train,y_train)
 
 print("Training completed.")
@@ -61,6 +64,10 @@ print("Recall:", recall)
 f1 = f1_score(y_test, predictions)
 print("F1 Score:", f1)
 
+# export the iteration data
+trainedModel.export_iteration_tracking_data("results/iterationData.csv")
 
-# print(f'Score on training set : {model.score(X_train, y_train)}')
-print(f'Score on test set : {model.score(X_test, y_test)}')
+# export the rule population
+trainedModel.export_final_rule_population("results/fileRulePopulation.csv")
+
+populationData2 = pd.read_csv("defaultExportDir/fileRulePopulation.csv")
