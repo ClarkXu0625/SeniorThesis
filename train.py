@@ -65,9 +65,7 @@ f1 = f1_score(y_test, predictions)
 print("F1 Score:", f1)
 
 # export the iteration data
-trainedModel.export_iteration_tracking_data("results/iterationData.csv")
+trainedModel.export_iteration_tracking_data()
 
 # export the rule population
-trainedModel.export_final_rule_population("results/fileRulePopulation.csv")
-
-populationData2 = pd.read_csv("defaultExportDir/fileRulePopulation.csv")
+trainedModel.export_final_rule_population()
