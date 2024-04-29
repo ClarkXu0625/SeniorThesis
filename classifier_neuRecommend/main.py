@@ -1,5 +1,7 @@
+# import from local file
 from load_spikes import load_spike
 from model_load import test
+from transform import pca_transform
 
 import os
 from time import time
@@ -20,10 +22,10 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.model_selection import GridSearchCV
 import xgboost as xgb
-from pca_transform import transform
+
 
 [neg_waveforms, pos_waveforms, neg_label, pos_label, fin_labels] = load_spike()
-[X, y] = transform(neg_waveforms, pos_waveforms, fin_labels)
+[X, y] = pca_transform(neg_waveforms, pos_waveforms, fin_labels)
 
 print(X.shape)
 print(X)
