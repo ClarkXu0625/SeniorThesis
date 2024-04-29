@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import FunctionTransformer
 
 
-def transform(neg_waveforms, pos_waveforms, fin_labels):
+def pca_transform(neg_waveforms, pos_waveforms, fin_labels):
 
     #####################################################
     ## preparing dataset, PCA for dimension reduction ###
