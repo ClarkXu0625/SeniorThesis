@@ -78,7 +78,7 @@ trainedModel.export_final_rule_population()
 # Create a DataFrame from your test data, test labels, and predictions
 df = pd.DataFrame(X_test)
 df['TrueLabel'] = y_test
-df['Prediction'] = predictions
+df['Prediction'] = np.array(predictions)
 
 # Filtering rows where predictions are wrong
 wrong_data_df = df[df['TrueLabel'] != df['Prediction']]
