@@ -69,3 +69,18 @@ trainedModel.export_iteration_tracking_data()
 
 # export the rule population
 trainedModel.export_final_rule_population()
+
+
+#########################################################
+### find wrong predictions ##################3
+#############################################
+
+# Create a DataFrame from your test data, test labels, and predictions
+df = pd.DataFrame(X_test)
+df['TrueLabel'] = y_test
+df['Prediction'] = predictions
+
+# Filtering rows where predictions are wrong
+wrong_data_df = df[df['TrueLabel'] != df['Prediction']]
+
+wrong_data_df.to_csv('wrong_predictions.csv', index=False)
