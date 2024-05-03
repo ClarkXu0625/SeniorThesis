@@ -10,8 +10,15 @@ from classifier_neuRecommend.transform import pca_transform
 from classifier_neuRecommend.load_spikes import load_spike
 
 [neg_waveforms, pos_waveforms, neg_label, pos_label, fin_labels] = load_spike()
-[X, y] = pca_transform(neg_waveforms, pos_waveforms, fin_labels)
+# [X, y] = pca_transform(neg_waveforms, pos_waveforms, fin_labels)
 fin_data = np.concatenate([neg_waveforms, pos_waveforms])
 
 #print(fin_data[0])
 print(np.array(fin_data))
+
+df = pd.DataFrame(fin_data)
+
+df['waveform'] = df.apply(lambda row: row.tolist(), axis=1)
+df_waveform = df[['waveform']]
+print(df_waveform.head)
+#print(df['waveform'][0])
