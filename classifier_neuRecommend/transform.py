@@ -33,3 +33,17 @@ def pca_transform(neg_waveforms, pos_waveforms, fin_labels):
     y = fin_labels
 
     return [X, y]
+
+
+def feature_extraction(waveform):
+    '''feature consist of 10 digits
+    1. If peak lower than -20
+    2. If peak lower than -30
+    3. If peak lower than -50
+    '''
+    feature = []
+    feature.append(waveform[30] < -20)
+    feature.append(waveform[30] < -30)
+    feature.append(waveform[30] < -50)
+    
+
