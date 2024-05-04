@@ -6,7 +6,30 @@ from sklearn.decomposition import PCA as pca
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import FunctionTransformer
+import pywt
 
+    #######################################################################
+    ## preparing dataset, wavele transformation for dimension reduction ###
+    #######################################################################
+def apply_wavelet_transform(signal, wavelet='db1'):
+    # You can adjust the 'level' based on your specific needs or leave it to determine automatically
+    coeffs = pywt.wavedec(signal, wavelet, level=2)  # Auto-select the level of decomposition
+    threshold = 0.2
+    coeffs = [pywt.threshold(c, threshold, mode='soft') for c in coeffs]
+
+    # Reconstruct the signal using the thresholded coefficients
+    reconstructed_signal = pywt.waverec(coeffs, 'db1')
+    
+    return reconstructed_signal
+
+def wavelet_transform(fin_data):
+    wavelet_coeffs = []
+
+    for signal in fin_data:
+        coeffs = apply_wavelet_transform(signal)
+        wavelet_coeffs.append(coeffs)
+
+    return np.array(wavelet_coeffs)
 
 def pca_transform(neg_waveforms, pos_waveforms, fin_labels):
 
@@ -45,5 +68,6 @@ def feature_extraction(waveform):
     feature.append(waveform[30] < -20)
     feature.append(waveform[30] < -30)
     feature.append(waveform[30] < -50)
-    
+
+
 
