@@ -1,5 +1,5 @@
 import numpy as np
-from classifier_neuRecommend.transform import pca_transform
+from classifier_neuRecommend.transform import pca_transform, wavelet_transform
 from classifier_neuRecommend.load_spikes import load_spike
 
 from skXCS import XCS
@@ -12,10 +12,13 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from tqdm import tqdm
 
 [neg_waveforms, pos_waveforms, neg_label, pos_label, fin_labels] = load_spike()
-[X, y] = pca_transform(neg_waveforms, pos_waveforms, fin_labels)
+#[X, y] = pca_transform(neg_waveforms, pos_waveforms, fin_labels)
+
 fin_data = np.concatenate([neg_waveforms, pos_waveforms])
-# X = np.concatenate([neg_waveforms, pos_waveforms])
-# y = fin_labels
+X = wavelet_transform(fin_data)
+y = fin_labels
+print('Transform finished')
+print(len(X[0]))
 
 # Split into Train, Test, and Validation sets
 # X_train, X_test, y_train, y_test = \
@@ -23,11 +26,9 @@ fin_data = np.concatenate([neg_waveforms, pos_waveforms])
 X_train, X_test, y_train, y_test, waveform_train, waveform_test = \
     train_test_split(X, y, fin_data, test_size=0.1, random_state=1)
 
-# X_train, X_val, y_train, y_val = \
-#     train_test_split(X_train, y_train, test_size=0.25, random_state=1)
 
 
-
+print("Train started")
 # Initialize and train model, setting hyperparameters to maximize the perfomance of classification
 # model = XCS(
 #     N=2000,                 # Increased population size
