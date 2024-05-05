@@ -12,11 +12,11 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from tqdm import tqdm
 
 [neg_waveforms, pos_waveforms, neg_label, pos_label, fin_labels] = load_spike()
-#[X, y] = pca_transform(neg_waveforms, pos_waveforms, fin_labels)
+[X, y] = pca_transform(neg_waveforms, pos_waveforms, fin_labels)
 
 fin_data = np.concatenate([neg_waveforms, pos_waveforms])
-X = wavelet_transform(fin_data)
-y = fin_labels
+# X = wavelet_transform(fin_data)
+# y = fin_labels
 print('Transform finished')
 print(len(X[0]))
 
@@ -38,7 +38,7 @@ print("Train started")
 #     theta_sub=50,           # Experience threshold
 #     learning_iterations=5000
 # )
-model = XCS(learning_iterations=5000)
+model = XCS(learning_iterations=5000000)
 
 trainedModel = model.fit(X_train,y_train)
 
