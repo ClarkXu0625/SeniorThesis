@@ -27,6 +27,8 @@ import xgboost as xgb
 [neg_waveforms, pos_waveforms, neg_label, pos_label, fin_labels] = load_spike()
 [X, y] = pca_transform(neg_waveforms, pos_waveforms, fin_labels)
 
+print(f'negative waveform dataset size: {neg_waveforms.shape}')
+print(f'positive waveform dataset size: {pos_waveforms.shape}')
 print(X.shape)
 print(X)
 
