@@ -1,5 +1,5 @@
 import numpy as np
-from classifier_neuRecommend.transform import pca_transform, wavelet_transform
+from classifier_neuRecommend.transform import pca_transform, wavelet_transform, feature_extraction
 from classifier_neuRecommend.load_spikes import load_spike
 
 from skXCS import XCS
@@ -15,16 +15,23 @@ from tqdm import tqdm
 [X, y] = pca_transform(neg_waveforms, pos_waveforms, fin_labels)
 
 fin_data = np.concatenate([neg_waveforms, pos_waveforms])
+
+X_new = np.empty(shape=(len(X), X.shape[1]+8))
+
+for i in range(0, len(fin_data)):
+    waveform = fin_data[i]
+    X_new[i] = np.concatenate([X[i], feature_extraction(waveform)])
+
 # X = wavelet_transform(fin_data)
 # y = fin_labels
 print('Transform finished')
-print(len(X[0]))
+print(len(X_new[0]))
 
 # Split into Train, Test, and Validation sets
 # X_train, X_test, y_train, y_test = \
 #     train_test_split(X, y, test_size=0.1, random_state=1)
 X_train, X_test, y_train, y_test, waveform_train, waveform_test = \
-    train_test_split(X, y, fin_data, test_size=0.1, random_state=1)
+    train_test_split(X_new, y, fin_data, test_size=0.1, random_state=1)
 
 
 
@@ -38,7 +45,7 @@ print("Train started")
 #     theta_sub=50,           # Experience threshold
 #     learning_iterations=5000
 # )
-model = XCS(learning_iterations=5000000)
+model = XCS(learning_iterations=500000)
 
 trainedModel = model.fit(X_train,y_train)
 
