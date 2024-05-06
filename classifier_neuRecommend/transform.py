@@ -58,16 +58,67 @@ def pca_transform(neg_waveforms, pos_waveforms, fin_labels):
     return [X, y]
 
 
+def signal_to_noise_ratio(waveform):
+    # assume signal region ranges from 20th time step to 40th time step.
+    # waveform is numpy array
+    signal_region = waveform[20:40]
+    noise_region = np.concatenate((waveform[0:20], waveform[40:len(waveform)]))
+    
+    
+    signal_amplitude = np.max(signal_region) - np.min(signal_region)
+    noise_level = np.std(noise_region)
+    
+    return signal_amplitude/noise_level
+
+def get_snr(dataset):
+    size = len(dataset)
+    neg_SNR = np.zeros(size)
+    for i in range(0, size):
+        neg_SNR[i] = signal_to_noise_ratio(dataset[i])
+        
+    return neg_SNR
+
+def is_pos_deflection(waveform):
+    return (waveform[30] == np.max(waveform[20:30]))
+
+def is_max_or_min(waveform):
+    if is_pos_deflection:
+        return (waveform[30] == np.max(waveform))
+    else:
+        return (waveform[30] == np.min(waveform))
+    
+def get_derivative(waveform):
+    derivative = np.zeros(len(waveform)-1)
+    for i in range(0, len(derivative)):
+        derivative[i] = waveform[i+1]-waveform[i]
+    return derivative
+    
+
 def feature_extraction(waveform):
-    '''feature consist of 10 digits
-    1. If peak lower than -20
-    2. If peak lower than -30
-    3. If peak lower than -50
+    '''feature consist of the rest 10 digits
+    11. If the waveform downward deflection point is above -20 mV;
+    12. If the waveform downward deflection point is in range between -20 ~ -30 mV;
+    13. If the waveform downward deflection point is in range between -30 ~ -50 mV;
+    14. If the waveform is positively deflected;
+    15. If the deflection point is either the maximum or minimum point of the waveform
+    16. If the waveform SNR is below 5.55;
+    17. SNR value
+    18
+
     '''
     feature = []
-    feature.append(waveform[30] < -20)
-    feature.append(waveform[30] < -30)
-    feature.append(waveform[30] < -50)
+    snr = signal_to_noise_ratio(waveform)
+
+    feature.append(waveform[30] < -20)  # 11
+    feature.append(waveform[30] < -30)  # 12
+    feature.append(waveform[30] < -50)  # 13
+    feature.append(is_pos_deflection(waveform)) # 14
+    feature.append(is_max_or_min(waveform))     # 15   
+    feature.append(snr<5.55)    # 16
+    feature.append(snr)         # 17
+    feature.append(waveform[30])    # 18
+    return feature
+
 
 
 
