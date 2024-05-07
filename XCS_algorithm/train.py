@@ -45,7 +45,8 @@ print("Train started")
 #     theta_sub=50,           # Experience threshold
 #     learning_iterations=5000
 # )
-model = XCS(learning_iterations=500000)
+model = XCS(N=5000,
+            learning_iterations=500000)
 
 trainedModel = model.fit(X_train,y_train)
 
