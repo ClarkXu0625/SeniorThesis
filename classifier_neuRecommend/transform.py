@@ -97,7 +97,7 @@ def get_derivative(waveform):
     return derivative
     
 
-def feature_extraction(waveform, attribute=8):
+def feature_extraction(waveform, a=0, b=8):
     '''feature consist of the rest 10 digits
     11. If the waveform downward deflection point is above -20 mV;
     12. If the waveform downward deflection point is in range between -20 ~ -30 mV;
@@ -120,7 +120,7 @@ def feature_extraction(waveform, attribute=8):
     feature.append(snr<5.55)    # 16
     feature.append(snr)         # 17
     feature.append(waveform[30])    # 18
-    return feature[0:attribute]
+    return feature[a:b]
 
 # def get_cluster_pred(X_train, y_train, X):
 #     model_save_dir = 'classifier_neuRecommend/model_new'
