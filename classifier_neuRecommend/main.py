@@ -21,6 +21,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import xgboost as xgb
 
 
@@ -83,3 +84,19 @@ clf.fit(X_train, y_train)
 
 print(f'Score on training set : {clf.score(X_train, y_train)}')
 print(f'Score on test set : {clf.score(X_test, y_test)}')
+
+print("************************************")
+# Predicting the labels for the test set
+y_pred = clf.predict(X_test)
+
+# Calculate metrics
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred, average='binary')  # adjust average as needed
+recall = recall_score(y_test, y_pred, average='binary')        # adjust average as needed
+f1 = f1_score(y_test, y_pred, average='binary')                # adjust average as needed
+
+# Print the calculated metrics
+print(f'Accuracy: {accuracy}')
+print(f'Precision: {precision}')
+print(f'Recall: {recall}')
+print(f'F1 Score: {f1}')
