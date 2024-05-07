@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import FunctionTransformer
 import pywt
 import json
-import xgboost as xgb
+# import xgboost as xgb
 import os
 
     #######################################################################
@@ -122,21 +122,21 @@ def feature_extraction(waveform, attribute=8):
     feature.append(waveform[30])    # 18
     return feature[0:attribute]
 
-def get_cluster_pred(X_train, y_train, X):
-    model_save_dir = 'classifier_neuRecommend/model_new'
-    optim_params_path = os.path.join(model_save_dir, 'optim_params.json')
+# def get_cluster_pred(X_train, y_train, X):
+#     model_save_dir = 'classifier_neuRecommend/model_new'
+#     optim_params_path = os.path.join(model_save_dir, 'optim_params.json')
 
-    with open(optim_params_path, 'r') as outfile:
-        best_params = json.load(outfile)
+#     with open(optim_params_path, 'r') as outfile:
+#         best_params = json.load(outfile)
 
-    clf = xgb.XGBClassifier(**best_params)
-    clf.fit(X_train, y_train)
+#     clf = xgb.XGBClassifier(**best_params)
+#     clf.fit(X_train, y_train)
 
 
-    print("************************************")
-    # Predicting the labels for the test set
-    y_pred = clf.predict(X)
-    return y_pred
+#     print("************************************")
+#     # Predicting the labels for the test set
+#     y_pred = clf.predict(X)
+#     return y_pred
 
 
 
