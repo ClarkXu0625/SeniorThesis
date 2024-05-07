@@ -16,11 +16,12 @@ from tqdm import tqdm
 
 fin_data = np.concatenate([neg_waveforms, pos_waveforms])
 
-X_new = np.empty(shape=(len(X), X.shape[1]+8))
+attr_num = 3
+X_new = np.empty(shape=(len(X), X.shape[1]+attr_num))
 
 for i in range(0, len(fin_data)):
     waveform = fin_data[i]
-    X_new[i] = np.concatenate([X[i], feature_extraction(waveform)])
+    X_new[i] = np.concatenate([X[i], feature_extraction(waveform, attr_num)])
 
 # X = wavelet_transform(fin_data)
 # y = fin_labels
@@ -45,8 +46,8 @@ print("Train started")
 #     theta_sub=50,           # Experience threshold
 #     learning_iterations=5000
 # )
-model = XCS(N=5000,
-            learning_iterations=500000)
+model = XCS(N=1000,
+            learning_iterations=5000)
 
 trainedModel = model.fit(X_train,y_train)
 
