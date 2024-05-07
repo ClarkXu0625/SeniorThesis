@@ -16,7 +16,7 @@ from tqdm import tqdm
 
 fin_data = np.concatenate([neg_waveforms, pos_waveforms])
 
-attr_num = 3
+attr_num = 8
 X_new = np.empty(shape=(len(X), X.shape[1]+attr_num))
 
 for i in range(0, len(fin_data)):
